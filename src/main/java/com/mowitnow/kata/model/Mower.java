@@ -1,17 +1,23 @@
 package com.mowitnow.kata.model;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 @EqualsAndHashCode
 @Getter
-@ToString
-@Builder
+@Setter
+@Builder (toBuilder = true)
 public class Mower {
     private Long id;
     private Position position;
     private MowerDirection direction;
 
+    @Override
+    public String toString() {
+        return position.getX() +
+                " " + position.getY() +
+                " " + direction;
+    }
 }

@@ -4,24 +4,20 @@ import com.mowitnow.kata.exception.IncorrectFileException;
 import com.mowitnow.kata.model.*;
 import com.mowitnow.kata.service.MowerService;
 import com.mowitnow.kata.service.MowerServiceMgr;
-import com.mowitnow.kata.util.FileTranslatorUtil;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.IOException;
 
 public class StepDefinitions {
 
-    private final String FILEPATH = "resources/com/mowitnow/kata/in";
+    private final String FILEPATH = "src/test/resources/com/mowitnow/kata/in/";
     private String fileName;
     private Mower mower;
-    private Lawn lawn;
+    private Lawn lawn = Lawn.builder().build();
     private MowerService service = new MowerServiceMgr();
     private String output;
 
@@ -33,17 +29,16 @@ public class StepDefinitions {
                 .build();
     }
 
-    @And("The following lawn coordinate : {int},{int}")
+    @Given("The following lawn coordinate : {int},{int}")
     public void theFollowingLawnCoordinate(int x, int y) {
         lawn = Lawn.builder()
                 .topRightCorner(new Position(x, y))
-                .mowers(Arrays.asList(mower))
                 .build();
     }
 
     @When("I ask the mower to execute the instruction : {}")
     public void iAskTheMowerToExecuteTheInstruction(String instruction) {
-        mower = service.executeInstruction(mower, MowerInstruction.valueOf(instruction));
+        service.executeInstruction(mower, MowerInstruction.valueOf(instruction),lawn.getTopRightCorner());
     }
 
     @Then("The mower new position should be {int},{int},{}")
@@ -66,6 +61,8 @@ public class StepDefinitions {
         try {
             output = service.executeInstructionsFile(fileName, FILEPATH);
         } catch (IncorrectFileException e) {
+            output = "";
+        } catch (IOException e) {
             output = "";
         }
     }
