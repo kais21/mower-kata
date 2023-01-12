@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
+@ToString
+@EqualsAndHashCode
 public class Lawn {
-    private long id ;
-    private Position topRightCorner ;
-    private Map<Mower,String> mowersInstruction ;
+    private Position topRightCorner;
+    private Map<Mower, List<MowerInstruction>> mowersInstructions;
 }

@@ -8,4 +8,9 @@ import lombok.Data;
 public class Position {
     private int X;
     private int Y;
+
+    @Override
+    public String toString() {
+        return X + " " + Y;
+    }
 }
